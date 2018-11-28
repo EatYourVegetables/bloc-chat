@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import './../styles/RoomListStyle.css';
 
 class RoomList extends Component {
     constructor(props) {
@@ -43,14 +44,18 @@ class RoomList extends Component {
 
    render(){
        return(
-        <section>
-            {this.state.rooms.map((room) =>
-                <p key = {room.key}>{room.name}</p>
-            )}
+        <section id="nav-bar">
+            <nav id="room-container">
+                    {this.state.rooms.map((room) =>
+                        <p id="nav-room" key = {room.key}>{room.name}</p>
+                    )}
+            </nav>
 
-            <form>
-                <input type="text" value={this.state.value} onChange={this.handleChange} placeholder="Create a new room"/><br/>
-                <input type="button" value="Add room" onClick={this.createRoom.bind(this, this.state.value)} />
+            <form id="room-form-container">
+                <div id="room-form">
+                    <input type="text" value={this.state.value} onChange={this.handleChange} placeholder="Create a new room"/><br/>
+                    <input type="button" value="Add room" onClick={this.createRoom.bind(this, this.state.value)} />
+                </div>
             </form>
         </section>
        );

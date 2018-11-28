@@ -1,0 +1,29 @@
+#nav-bar{
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+    height: 100vh;
+    border: 3px;
+    box-sizing: border-box;
+    padding: 25px 20px;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+#room-container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#nav-room{
+    cursor: pointer;
+}
+
+#room-form-container{
+    display: flex;
+    align-items: flex-start;
+}
+
+#room-form{
+
+}
