@@ -1,0 +1,35 @@
+#messages-container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 25px;
+}
+
+.message-container{
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 15px;
+}
+
+.message-top-container{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.message-username{
+    font-weight: 600;
+}
+
+.message-content{
+    color: rgba(0, 0, 0, 0.75);
+    margin-left: 5px;
+}
+
+.message-time-stamp{
+    color: rgba(0, 0, 0, 0.75);
+    font-size: .85em;
+    font-weight: 100;
+    margin-right: 5px;
+}

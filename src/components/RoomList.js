@@ -13,13 +13,13 @@ class RoomList extends Component {
     }
 
     componentDidMount() {
-     this.roomsRef.on('child_added', snapshot => {
-       const room = snapshot.val();
-       room.key = snapshot.key;
-       this.setState({
-           rooms: this.state.rooms.concat(room)
-       })
-     });
+        this.roomsRef.on('child_added', snapshot => {
+            const room = snapshot.val();
+            room.key = snapshot.key;
+            this.setState({
+                rooms: this.state.rooms.concat(room)
+            })
+        });
    }
 
    handleChange(event) {
@@ -47,10 +47,9 @@ class RoomList extends Component {
         <section id="nav-bar">
             <nav id="room-container">
                     {this.state.rooms.map((room) =>
-                        <p id="nav-room" key = {room.key}>{room.name}</p>
+                        <p className="nav-room" onClick={this.props.activateRoom.bind(this, room)} key = {room.key}>{room.name}</p>
                     )}
             </nav>
-
             <form id="room-form-container">
                 <div id="room-form">
                     <input type="text" value={this.state.value} onChange={this.handleChange} placeholder="Create a new room"/><br/>
