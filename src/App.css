@@ -2,3 +2,13 @@
     display: flex;
     width: 100vw;
 }
+
+#side-bar-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 100vh;
+    border: 3px;
+    box-sizing: border-box;
+}

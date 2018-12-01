@@ -1,0 +1,28 @@
+#user-container{
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 280px;
+    height: 120px;
+    padding: 25px 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+#user-info-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+#user-pic{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+#user-sign-out-button{
+    width: 100px;
+}
