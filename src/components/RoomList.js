@@ -42,20 +42,26 @@ class RoomList extends Component {
     }
    }
 
+   handleKeyPress(newRoom, e){
+       console.log('this was pressed');
+       if(e.key === 'Enter'){
+           this.createRoom(newRoom);
+       }
+   }
+
    render(){
        return(
         <section id="nav-bar">
             <nav id="room-container">
                     {this.state.rooms.map((room) =>
-                        <p className="nav-room" onClick={this.props.activateRoom.bind(this, room)} key = {room.key}>{room.name}</p>
+                        <p className="nav-room" onClick={() => this.props.activateRoom(room)} key = {room.key}>{room.name}</p>
                     )}
             </nav>
-            <form id="room-form-container">
-                <div id="room-form">
-                    <input type="text" value={this.state.value} onChange={this.handleChange} placeholder="Create a new room"/><br/>
-                    <input type="button" value="Add room" onClick={this.createRoom.bind(this, this.state.value)} />
+                <div id="room-form-container">
+                   <input type="text" value={this.state.value} onChange={this.handleChange} 
+                    onKeyPress={(e) => this.handleKeyPress(this.state.value, e)} placeholder="Create a new room"/><br/>
+                    <input type="button" value="Add room" onClick={() => this.createRoom(this.state.value)} />
                 </div>
-            </form>
         </section>
        );
    }
