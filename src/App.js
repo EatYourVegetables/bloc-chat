@@ -6,8 +6,6 @@ import './App.css';
 
 import * as firebase from 'firebase';
 
-// src = "https://www.gstatic.com/firebasejs/5.5.9/firebase.js"
-
 // Initialize Firebase
 var config = {
   apiKey: "AIzaSyAIb5MzkimzuqxI4_5TnbisNu2Qw_iRGek",
@@ -61,6 +59,7 @@ class App extends Component {
         <MessageList
           firebase = {firebase}
           activeRoom = {this.state.activeRoom}
+          user = {this.state.user}
         />
       </div>
     );
