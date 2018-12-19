@@ -5,8 +5,6 @@ class User extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            authenticated: false,
-            user: undefined
         };
     }
 
@@ -34,23 +32,16 @@ class User extends Component {
 
     signOut(){
         this.props.firebase.auth().signOut();
-        this.setState({
-            authenticated: false,
-        })
         this.props.authenticateUser(undefined);
     }
 
     authenticate(user){
-        this.setState({
-            authenticated: true,
-            user: user
-        })
         this.props.authenticateUser(user);
     }
 
-    getUserPic(){
+    getUserPic() {
         const userPic = {
-            background: 'url(' + this.state.user.photoURL + ') center',
+            background: 'url(' + this.props.user.photoURL + ') center',
             backgroundSize: 'cover',
         }
         return userPic;
@@ -59,19 +50,26 @@ class User extends Component {
     render(){
         
         return(
-            (this.state.authenticated)
+            (this.props.user !== undefined)
             ? <div id="user-container">
                 <div id="user-info-container">
-                    <div id="user-pic" style={this.getUserPic()}></div>
-                    <div id="user-username" >{this.state.user.displayName}</div>
+                    <div className="user-pic" style={this.getUserPic()}></div>
+                    <div id="user-username" >{this.props.user === undefined
+								? ""
+								: this.props.user.displayName}</div>
                 </div>
-                <button id="user-sign-out-button" onClick={() => this.signOut()}>Sign Out</button>
+                    <div id="user-google-button-container-sign-out" onClick={() => this.signOut()}>
+                        <div className="user-google-text" id="sign-out">Sign out</div>
+                    </div>
             </div>
 
 
             :<div id="user-container">
                 <div id="user-sign-in">
-                    <button id="user-sign-in-button" onClick={() => this.signIn()}>Sign In</button>
+                    <div id="user-google-button-container" onClick={() => this.signIn()}>
+                        <div id="user-google-logo"></div>
+                        <div className="user-google-text">Sign in with Google</div>
+                    </div>
                 </div>
             </div>
             

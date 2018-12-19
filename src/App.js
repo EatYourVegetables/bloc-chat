@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import RoomList from './components/RoomList.js';
+import TopBar from './components/TopBar.js';
 import MessageList from './components/MessageList.js';
 import User from './components/User.js';
 import './App.css';
@@ -26,12 +27,20 @@ class App extends Component {
     };
 
     this.activateRoom = this.activateRoom.bind(this);
+    this.deactivateRoom = this.deactivateRoom.bind(this);
     this.authenticateUser = this.authenticateUser.bind(this);
   }
 
   activateRoom(room){
     this.setState({
       activeRoom: room
+    })
+  }
+
+  deactivateRoom() {
+    console.log('I was pressed');
+    this.setState({
+      activeRoom: ''
     })
   }
 
@@ -43,24 +52,34 @@ class App extends Component {
 
   render() {
     return(
-      <div id="body">
-        <section id="side-bar-container">
-          <RoomList
-            firebase = {firebase}
-            activateRoom = {this.activateRoom}
-            activeRoom = {this.state.activeRoom}
-          />
-          <User
+      <div id="main-container">
+        <TopBar
           firebase = {firebase}
           authenticateUser = {this.authenticateUser}
           user = {this.state.user}
+          deactivateRoom = {this.deactivateRoom}
+          authenticateUser = {this.authenticateUser}
           />
-        </section>
-        <MessageList
-          firebase = {firebase}
-          activeRoom = {this.state.activeRoom}
-          user = {this.state.user}
-        />
+        <div id="body">
+          <section id="side-bar-container">
+            <RoomList
+              firebase = {firebase}
+              activateRoom = {this.activateRoom}
+              activeRoom = {this.state.activeRoom}
+            />
+            <User
+            firebase = {firebase}
+            authenticateUser = {this.authenticateUser}
+            user = {this.state.user}
+            getUserPic = {this.getUserPic}
+            />
+          </section>
+          <MessageList
+            firebase = {firebase}
+            activeRoom = {this.state.activeRoom}
+            user = {this.state.user}
+          />
+        </div>
       </div>
     );
   }

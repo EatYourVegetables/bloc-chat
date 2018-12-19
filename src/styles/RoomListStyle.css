@@ -4,24 +4,140 @@
     width: 280px;
     flex: 1;
     padding: 25px 20px;
-    background-color: rgba(0, 0, 0, 0.25);
+    background-color: #ffffff;
 }
 
 #room-container{
     display: flex;
+    flex: 1;
     flex-direction: column;
     align-items: flex-start;
+    flex-wrap: nowrap;
+    overflow: auto;
+    flex-shrink: 0;
+}
+
+.nav-room-container{
+    cursor: pointer;
+    display: flex;
+    flex-shrink: 0;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 15px;
+    box-sizing: border-box;
+    transition: all .5s cubic-bezier(.25, .8, .25, 1);
+}
+
+.nav-room-container:hover {
+    background-color: rgba(77, 94, 179, .25);
+    color: rgb(77, 94, 179);
+}
+
+#room-selected{
+    background-color: rgba(77, 94, 179, .25);
+    color: rgb(77, 94, 179);
 }
 
 .nav-room{
-    cursor: pointer;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.room-name{
+    width: 205px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#room-edit-container{
+    display: flex;
+    align-items: center;
+    height: 50px;
+    width: 205px;
+}
+
+#room-edit-input{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    width: 170px;
+    height: 25px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 5px;
+}
+
+#room-edit-send{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.05);
+    font-size: 16px;
+    border: none;
+    width: 25px;
+    height: 35px;
+    padding: 5px;
+    color: rgb(77, 94, 179);
+    transition: all .5s cubic-bezier(.25, .8, .25, 1);
+}
+
+#room-edit-send:hover{
+    color: rgba(77, 94, 179, 0.5);
+}
+
+#room-edit-send:before {
+    font-family: "Ionicons";
+    content: "\f2ba";
 }
 
 #room-form-container{
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 15px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    height: 35px;
+    border-radius: 24px;
 }
 
-#room-form{
+#room-new-room-input {
+    border: none;
+    width: 100%;
+    height: 100%;
+}
 
+#room-new-room-button {
+    border: none;
+    background-color: rgb(77, 94, 179);
+    color: rgb(255, 255, 255);
+    padding: 0 15px;
+    height: 25px;
+    font-weight: 700;
+    font-size: .75em;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 5px;
+    transition: all .5s cubic-bezier(.25, .8, .25, 1);
+}
+
+#room-new-room-button:hover {
+    background-color: rgb(65, 71, 100);
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+#room-button-container{
+     display: flex;
 }
