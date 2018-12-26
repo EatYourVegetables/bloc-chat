@@ -9,7 +9,7 @@ class RoomList extends Component {
       value: "",
       hoverRoom: null,
       editValue: "",
-      editRoom: "",
+      editRoom: ""
     };
     this.roomsRef = this.props.firebase.database().ref("rooms");
     this.handleChange = this.handleChange.bind(this);
@@ -85,7 +85,10 @@ class RoomList extends Component {
       return;
     } else {
       this.roomsRef.push({
-        name: newRoom
+        name: newRoom,
+        userId: this.props.user !== undefined 
+          ? this.props.user.uid
+          : 0
       });
       this.setState({
         value: ""
@@ -155,8 +158,11 @@ class RoomList extends Component {
 									</div>
 								)}
 							</div>
-							{this.state.hoverRoom !== null &&
-							this.state.hoverRoom === room.key ? (
+							{this.props.user !== undefined && 
+                (room.userId === this.props.user.uid || 
+                  this.props.user.uid === this.props.adminUser) &&
+                this.state.hoverRoom !== null &&
+                this.state.hoverRoom === room.key ? (
 								<div id="room-button-container">
 									<button
 										className="message-edit"

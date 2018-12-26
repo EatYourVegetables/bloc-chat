@@ -36,6 +36,7 @@ class User extends Component {
     }
 
     authenticate(user){
+        console.log(user);
         this.props.authenticateUser(user);
     }
 

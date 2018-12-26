@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import 'emoji-mart/css/emoji-mart.css';
 import "./../styles/MessageListStyle.css";
 import { Picker } from 'emoji-mart';
+import Home from "./Home.js";
 
 class MessageList extends Component {
 	constructor(props) {
@@ -14,7 +15,9 @@ class MessageList extends Component {
 			editValue: "",
 			editMessage: "",
 			messageHeight: 25,
-			emojiActive: false
+			emojiActive: false,
+			readyToScroll: false,
+			newMessages: 0
 		};
 		this.messagesRef = this.props.firebase.database().ref("messages");
 		this.messageArray = [];
@@ -25,6 +28,9 @@ class MessageList extends Component {
 		this.innerDivRef = React.createRef();
 		this.outerDivRef = React.createRef();
 		this.messageHeightRef = React.createRef();
+	 	this.lastMessageRef = React.createRef();
+		this.scrollableDivRef = React.createRef();
+		this.messageInputRef = React.createRef();
 		this.onValueAdded = snapshot => {
 			const message = snapshot.val();
 			message.key = snapshot.key;
@@ -63,10 +69,9 @@ class MessageList extends Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (
-			this.props.activeRoom !== "" &&
-			this.props.activeRoom.key !== prevProps.activeRoom.key
-		) {
+		if (this.props.activeRoom !== "" &&
+			this.props.activeRoom.key !== prevProps.activeRoom.key) {
+
 			this.messagesRef
 				.orderByChild("roomId")
 				.equalTo(this.props.activeRoom.key)
@@ -97,6 +102,10 @@ class MessageList extends Component {
 				.on("child_changed", this.onValueChanged);
 		}
 
+		if (this.state.readyToScroll) {
+			this.scrollToBottom();
+		}
+
 		// if(this.state.value !== prevState.value){
 		//     this.setState({
 		//         typing: 'Guest is typing...'
@@ -113,12 +122,14 @@ class MessageList extends Component {
 				roomId: this.props.activeRoom.key,
 				sentAt: this.fetchTime(),
 				username: "Guest",
-				userPic: ""
+				userPic: "",
+				userId: 0
 			});
 			this.setState({
 				value: "",
 				typing: "",
-				emojiActive: false
+				emojiActive: false,
+				readyToScroll: true
 			});
 		} else {
 			this.messagesRef.push({
@@ -126,12 +137,14 @@ class MessageList extends Component {
 				roomId: this.props.activeRoom.key,
 				sentAt: this.fetchTime(),
 				username: this.props.user.displayName,
-				userPic: this.props.user.photoURL
+				userPic: this.props.user.photoURL,
+				userId: this.props.user.uid
 			});
 			this.setState({
 				value: "",
 				typing: "",
-				emojiActive: false
+				emojiActive: false,
+				readyToScroll: true
 			});
 		}
 	}
@@ -238,6 +251,31 @@ class MessageList extends Component {
 		})
 	}
 
+	scrollToBottom(){
+
+		if(this.compareRefPos()){
+			this.setState({
+				readyToScroll: false
+				})
+			this.scrollableDivRef.current.scrollTop = this.innerDivRef.current.scrollHeight;
+		}else{
+			this.setState({
+				newMessages: this.state.newMessages + 1
+			})
+		}
+	}
+
+	compareRefPos(){
+		const total = Math.abs(this.messageInputRef.current.getBoundingClientRect().top -
+			this.lastMessageRef.current.getBoundingClientRect().bottom);
+		if(total <= 99){
+			return true;
+		}
+		else{
+			return false;
+		};
+	}
+
 	render() {
 		const heightCompared =
 			this.innerDivRef.current !== null &&
@@ -254,16 +292,17 @@ class MessageList extends Component {
 
 			: <div />
 
-		return this.props.activeRoom === "" ? <section className="message-list-container" /> : <section className="message-list-container">
+		return this.props.activeRoom === "" ? <Home /> : <section className="message-list-container">
 				<div id="messages-container">
 					<div id="message-room-name-container">
 						<h1 id="message-room-name">{this.props.activeRoom.name}</h1>
 					</div>
 					<div ref={this.outerDivRef} id={heightCompared ? "messages-scroll-hider" : "messages-scroll-hider-innactive"}>
-						<div id={heightCompared ? "messages-container-inner-scroll-hidden" : "messages-container-inner"}>
-						<div ref={this.innerDivRef} id="messages" style={heightCompared ? {marginBottom: "75px"} : {}}>
-								{this.state.messages.map(message => (
+						<div ref={this.scrollableDivRef} id={heightCompared ? "messages-container-inner-scroll-hidden" : "messages-container-inner"}>
+							<div ref={this.innerDivRef} id="messages" style={heightCompared ? { marginBottom: "57px" } : {}}>
+								{this.state.messages.map((message, i, array) => (
 									<div
+										ref={array.length - 1 === i ? this.lastMessageRef :""}
 										className="message-container"
 										key={message.key}
 										onMouseEnter={() =>
@@ -274,6 +313,7 @@ class MessageList extends Component {
 										}
 										onClick={() => this.deactivateEmojiPicker()}
 									>
+										
 										<div className="message-left-container">
 											{message.userPic === "" ? (
 												<div className="guest-pic" />
@@ -290,7 +330,10 @@ class MessageList extends Component {
 													{message.username}
 												</div>
 												<div className="message-options">
-													{this.state.hoverMessage !== null &&
+													{this.props.user !== undefined &&
+													(message.userId === this.props.user.uid ||
+														this.props.user.uid === this.props.adminUser) &&
+													this.state.hoverMessage !== null &&
 													this.state.hoverMessage === message.key ? (
 														<div id="message-button-container">
 															<button
@@ -353,7 +396,8 @@ class MessageList extends Component {
 											this.state.emojiActive === false ? (
 												<div className="message-bottom-container">
 													<div className="message-like-love-container">
-														<div className="message-like" />
+														<div className="message-like" 
+															onClick={()=>console.log(this.checkRefPos())}/>
 														<div className="message-dislike" />
 														<div className="message-fire" />
 														<div className="message-heart" />
@@ -366,12 +410,14 @@ class MessageList extends Component {
 									</div>
 								))}
 							</div>
-							<div id="message-input-container" style={heightCompared ? { position: "absolute", left: 0, bottom: 0, width: "100%" } : {}}>
+						<div id="message-input-container" ref={this.messageInputRef} style={heightCompared ? { position: "absolute", left: 0, bottom: 0, width: "100%"} : {}}>
 								<div id="message-input-wrapper">
 									<input id="message-input" type="text" value={this.state.value} onChange={this.handleChange} onKeyPress={e => this.handleKeyPress(this.state.value, e)} placeholder="Type a message..." />
 									{emojiPicker}
 									<button id="message-input-emoji" onClick={() => this.toggleEmoji()} />
-									<button id="message-input-send" onClick={() => this.addMessage(this.state.value)} />
+									<button id="message-input-send" onClick={() => this.addMessage(this.state.value)}>
+										send
+									</button>
 								</div>
 							</div>
 						</div>
