@@ -50,31 +50,39 @@ class User extends Component {
     
     render(){
         
-        return(
-            (this.props.user !== undefined)
-            ? <div id="user-container">
-                <div id="user-info-container">
-                    <div className="user-pic" style={this.getUserPic()}></div>
-                    <div id="user-username" >{this.props.user === undefined
-								? ""
-								: this.props.user.displayName}</div>
-                </div>
-                    <div id="user-google-button-container-sign-out" onClick={() => this.signOut()}>
-                        <div className="user-google-text" id="sign-out">Sign out</div>
-                    </div>
-            </div>
-
-
-            :<div id="user-container">
-                <div id="user-sign-in">
-                    <div id="user-google-button-container" onClick={() => this.signIn()}>
-                        <div id="user-google-logo"></div>
-                        <div className="user-google-text">Sign in with Google</div>
-                    </div>
-                </div>
-            </div>
-            
-        );
+        return this.props.user !== undefined ? <div id="user-container">
+						<div id="user-info-container">
+							<div className="user-pic" style={this.getUserPic()} />
+							<div id="user-username">
+								{this.props.user === undefined
+									? ""
+									: this.props.user.displayName}
+							</div>
+						</div>
+						<div id="user-google-button-container-sign-out" onClick={() => this.signOut()}>
+							<div className="user-google-text" id="sign-out">
+								Sign out
+							</div>
+						</div>
+					</div> : <div id="footer">
+						<div id="user-container">
+							<div id="user-sign-in">
+								<div id="user-google-button-container" onClick={() => this.signIn()}>
+									<div id="user-google-logo" />
+									<div className="user-google-text">
+										Sign in with Google
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="footer-extra">
+							<div id="social-links">
+								<div id="linked-in-icon" />
+								<div id="github-icon"> </div>
+							</div>
+							<div id="copyright">© Copyright 2019 Jason Gonzalez-Whitsell.</div>
+						</div>
+					</div>;
     }
 }
 

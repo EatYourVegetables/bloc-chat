@@ -17,7 +17,10 @@ class MessageList extends Component {
 			messageHeight: 25,
 			emojiActive: false,
 			readyToScroll: false,
-			newMessages: 0
+			newMessages: 0,
+			messageRoomStatus: "PUBLIC",
+			messageRoomInnactive: "PRIVATE",
+			menuActive: false
 		};
 		this.messagesRef = this.props.firebase.database().ref("messages");
 		this.messageArray = [];
@@ -273,7 +276,35 @@ class MessageList extends Component {
 		}
 		else{
 			return false;
-		};
+		}
+	}
+
+	toggleMenu(){
+		this.state.menuActive
+		? this.setState({
+			menuActive: false
+		})
+		: this.setState({
+			menuActive: true
+		})
+	}
+
+	changeRoomStatus(){
+		console.log("IM HEREEEEEEEEEEEEEEEEEEE", this.state.messageRoomStatus);
+		if (this.state.messageRoomStatus === "PUBLIC") {
+			console.log("IM HEREEEEEEEEEEEEEEEEEEE", this.state.messageRoomStatus);
+			this.setState({
+				messageRoomStatus: "PRIVATE",
+				messageRoomInnactive: "PUBLIC"
+			})
+		}else{ 
+			this.setState({
+				messageRoomStatus: "PUBLIC",
+				messageRoomInnactive: "PRIVATE"
+			})
+		}
+
+		this.toggleMenu();
 	}
 
 	render() {
@@ -296,6 +327,19 @@ class MessageList extends Component {
 				<div id="messages-container">
 					<div id="message-room-name-container">
 						<h1 id="message-room-name">{this.props.activeRoom.name}</h1>
+						<div id="message-room-options-container" onClick={() => this.toggleMenu()}>
+							<div id = "message-room-options-status" >
+								{this.state.messageRoomStatus}
+							</div>
+							<div id = {this.state.menuActive
+								? "message-room-options-icon-up"
+								:"message-room-options-icon-down"} />
+
+							<div id = "message-room-options-menu" onClick={() => this.changeRoomStatus()}
+								style={this.state.menuActive ? {display: "flex"} : {display: "none"} }>
+								{this.state.messageRoomInnactive}
+							</div>
+						</div>
 					</div>
 					<div ref={this.outerDivRef} id={heightCompared ? "messages-scroll-hider" : "messages-scroll-hider-innactive"}>
 						<div ref={this.scrollableDivRef} id={heightCompared ? "messages-container-inner-scroll-hidden" : "messages-container-inner"}>

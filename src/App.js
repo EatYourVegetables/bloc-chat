@@ -25,12 +25,30 @@ class App extends Component {
 		this.state = {
 			activeRoom: "",
 			user: undefined,
-			adminUser: '6vq91i02nrg1ozlyQHWun9wowns1'
+			adminUser: '6vq91i02nrg1ozlyQHWun9wowns1',
+			sideBarToggled: false,
+			width: 0,
 		};
 
 		this.activateRoom = this.activateRoom.bind(this);
 		this.deactivateRoom = this.deactivateRoom.bind(this);
 		this.authenticateUser = this.authenticateUser.bind(this);
+		this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+	}
+
+	componentDidMount() {
+		this.updateWindowDimensions();
+		window.addEventListener('resize', this.updateWindowDimensions);
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener('resize', this.updateWindowDimensions);
+	}
+
+	updateWindowDimensions() {
+		this.setState({
+			width: window.innerWidth
+		});;
 	}
 
 	activateRoom(room) {
@@ -40,7 +58,6 @@ class App extends Component {
 	}
 
 	deactivateRoom() {
-		console.log("I was pressed");
 		this.setState({
 			activeRoom: ""
 		});
@@ -52,7 +69,20 @@ class App extends Component {
 		});
 	}
 
+	toggleSideBar(){
+		this.state.sideBarToggled 
+			? this.setState({
+				sideBarToggled: false
+			})
+			: this.setState({
+				sideBarToggled: true
+			})
+	}
+
 	render() {
+		let sideBarToggled = this.state.sideBarToggled 
+						? "side-bar-toggled-on" 
+						: "side-bar-toggled-off";
 		return (
 			<div id="main-container">
 				<TopBar
@@ -60,10 +90,17 @@ class App extends Component {
 					authenticateUser={this.authenticateUser}
 					user={this.state.user}
 					deactivateRoom={this.deactivateRoom}
-					authenticateUser={this.authenticateUser}
 				/>
 				<div id="body">
-					<section id="side-bar-container">
+					<div id={sideBarToggled}
+						onClick={() => this.toggleSideBar()}>
+						</div>
+					<section id={this.state.width >= 1200
+						? "side-bar-container"
+
+						: this.state.sideBarToggled 
+							? "side-bar-container-toggled-on" 
+							: "side-bar-container-toggled-off"}>
 						<RoomList
 							firebase={firebase}
 							activateRoom={this.activateRoom}

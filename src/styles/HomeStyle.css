@@ -9,7 +9,7 @@ p{
     justify-content: center;
     margin-left: 320px;
     margin-top: 70px;
-    padding: 25px 65px;
+    padding: 30px 65px;
 }
 
 #home-wrapper{
@@ -24,6 +24,7 @@ p{
     justify-content: center;
     align-items: center;
     margin: 20px 0;
+    max-width: 950px;
 }
 
 #home-logo-container{

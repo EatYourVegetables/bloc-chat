@@ -6,6 +6,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    min-width: 700px;
+    z-index: 99;
 }
 
 #top-logo-container{
